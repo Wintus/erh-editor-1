@@ -62,7 +62,7 @@ export const useAllDocuments = () => {
   return useFetchDocument<DocSet>(ref);
 };
 
-const setTimeout = (window || global).setTimeout;
+const { setTimeout } = window || global;
 
 const useUpdateDocument = <T extends unknown>(ref: database.Reference) => {
   const [pending, setPending] = useState(false);
