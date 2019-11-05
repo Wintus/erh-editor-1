@@ -11,6 +11,8 @@ import uuidv4 from "uuidv4";
 import Index from "./pages/Index";
 import Edit from "./pages/Edit";
 
+export { uuidv4 };
+
 const useCurrentPath = (history: History): string => {
   const [pathname, setPathname] = useState(history.location.pathname);
 
