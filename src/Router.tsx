@@ -38,3 +38,17 @@ const useEditorRouting = (pathname: string): JSX.Element => {
 
   return content;
 };
+
+const RouterContext = React.createContext<History | null>(null);
+
+type RouterProps = {
+  history: History;
+};
+
+export const Router: React.FC<RouterProps> = ({ history }) => {
+  const pathname = useCurrentPath(history);
+  const content = useEditorRouting(pathname);
+  return (
+    <RouterContext.Provider value={history}>{content}</RouterContext.Provider>
+  );
+};
