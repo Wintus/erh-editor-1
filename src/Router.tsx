@@ -52,3 +52,21 @@ export const Router: React.FC<RouterProps> = ({ history }) => {
     <RouterContext.Provider value={history}>{content}</RouterContext.Provider>
   );
 };
+
+type LinkProps = {
+  href: string;
+  as?: string;
+};
+
+export const Link: React.FC<LinkProps> = ({ href, as = "a", children }) => {
+  const history = useContext(RouterContext);
+  const onClick = useCallback(
+    (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+      e.preventDefault();
+      history!.push(href);
+    },
+    [history, href]
+  );
+  // desugar
+  return React.createElement(as, { href, onClick }, children);
+};
