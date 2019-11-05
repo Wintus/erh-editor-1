@@ -41,7 +41,7 @@ const useEditorRouting = (pathname: string): JSX.Element => {
 
 const RouterContext = React.createContext<History | null>(null);
 
-type RouterProps = {
+export type RouterProps = {
   history: History;
 };
 
