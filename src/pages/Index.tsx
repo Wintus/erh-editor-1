@@ -7,7 +7,7 @@ const useDocumentList = () => {
 
   return useMemo(() => {
     if (!loaded) {
-      return [<div>loading documents now……</div>];
+      return [<div key="loading">loading documents now……</div>];
     } else if (!documents) {
       return [];
     } else {
