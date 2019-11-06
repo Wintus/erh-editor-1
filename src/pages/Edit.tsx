@@ -14,9 +14,8 @@ const Input = styled.textarea`
   font-family: "monospace";
 `;
 
-export default ({ textId }: Pick<Document, "textId">) => {
+const EditPage = ({ textId }: Pick<Document, "textId">) => {
   const { text, updateText, loaded, pending } = useDatabaseDocument(textId);
-
   if (!loaded) {
     return <div>now loading……</div>;
   } else {
@@ -35,3 +34,5 @@ export default ({ textId }: Pick<Document, "textId">) => {
     );
   }
 };
+
+export default EditPage;

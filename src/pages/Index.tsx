@@ -23,14 +23,14 @@ const useDocumentList = () => {
   }, [documents, loaded]);
 };
 
-export default () => {
+const IndexPage = () => {
   const list = useDocumentList();
-  return (
-    <div>
-      <Link as="button" href={`/${uuidv4()}`}>
-        Create a new page
-      </Link>
-      <ul>{list}</ul>
-    </div>
-  );
+  return (<div>
+    <Link as="button" href={`/${uuidv4()}`}>
+      Create a new page
+    </Link>
+    <ul>{list}</ul>
+  </div>);
 };
+
+export default IndexPage;
