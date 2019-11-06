@@ -31,9 +31,7 @@ const useFetchDocument = <T>(ref: database.Reference) => {
 
   useEffect(() => {
     ref.on("value", snapshot => {
-      if (snapshot && snapshot.val()) {
-        setDocument(snapshot.val());
-      }
+      setDocument(snapshot.val());
       setLoaded(true);
     });
     return () => {
