@@ -1,5 +1,12 @@
 import { database } from "firebase";
-import { useContext, useMemo, useState, useEffect, useRef } from "react";
+import {
+  useContext,
+  useMemo,
+  useState,
+  useEffect,
+  useRef,
+  useCallback
+} from "react";
 import { firebase, FirebaseContext } from "./firebase";
 
 export interface Document {
@@ -59,26 +66,29 @@ const useUpdateDocument = <T extends unknown>(ref: database.Reference) => {
     };
   }, []);
 
-  const updateDocument = <T>(document: T) => {
-    if (timeoutRef.current != null) {
-      clearTimeout(timeoutRef.current);
-    }
-
-    const delayMs = 500;
-    const timeoutId = setTimeout(() => {
-      if (!mountedRef.current) {
-        return;
+  const updateDocument = useCallback(
+    (document: T) => {
+      if (timeoutRef.current != null) {
+        clearTimeout(timeoutRef.current);
       }
 
-      setPending(true);
-      ref.set(document).then(() => {
-        setPending(false);
-      });
+      const delayMs = 500;
+      const timeoutId = setTimeout(() => {
+        if (!mountedRef.current) {
+          return;
+        }
 
-      timeoutRef.current = null;
-    }, delayMs);
-    timeoutRef.current = timeoutId;
-  };
+        setPending(true);
+        ref.set(document).then(() => {
+          setPending(false);
+        });
+
+        timeoutRef.current = null;
+      }, delayMs);
+      timeoutRef.current = timeoutId;
+    },
+    [ref]
+  );
 
   return { pending, updateDocument };
 };
@@ -97,16 +107,19 @@ export const useDatabaseDocument = (textId: Document["textId"]) => {
     }
   }, [document]);
 
-  const updateText = (newText: string) => {
-    setText(newText);
-    const [title] = newText.split("\n");
-    updateDocument({
-      textId,
-      text: newText,
-      title,
-      updatedAt: new Date()
-    });
-  };
+  const updateText = useCallback(
+    (newText: string) => {
+      setText(newText);
+      const [title] = newText.split("\n");
+      updateDocument({
+        textId,
+        text: newText,
+        title,
+        updatedAt: new Date()
+      });
+    },
+    [textId, updateDocument]
+  );
 
   return { text, updateText, loaded, pending };
 };
