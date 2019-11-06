@@ -77,10 +77,12 @@ const useUpdateDocument = <T extends unknown>(ref: database.Reference) => {
         if (!mountedRef.current) {
           return;
         }
+
         setPending(true);
         ref.set(document).then(() => {
           setPending(false);
         });
+
         timeoutRef.current = null;
       }, delayMs);
       timeoutRef.current = timeoutId;
