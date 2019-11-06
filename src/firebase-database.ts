@@ -30,13 +30,7 @@ const useFetchDocument = <T>(ref: database.Reference) => {
   const [loaded, setLoaded] = useState<boolean>(false);
 
   useEffect(() => {
-    let mounted = true;
-    console.log({ mounted, ref }); // TODO: debug
     ref.on("value", snapshot => {
-      console.log({ mounted, snapshot }); // TODO: debug
-      if (!mounted) {
-        return;
-      }
       if (snapshot && snapshot.val()) {
         setDocument(snapshot.val());
       }
@@ -44,8 +38,6 @@ const useFetchDocument = <T>(ref: database.Reference) => {
     });
     return () => {
       ref.off();
-      mounted = false;
-      console.log({ mounted, ref }); // TODO: debug
     };
   }, [ref]);
 
