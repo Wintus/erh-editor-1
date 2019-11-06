@@ -54,17 +54,20 @@ export const useAllDocuments = () => {
 
 const { setTimeout } = window || global;
 
+const useUnmounted = () => {
+  const unmounted = useRef(false);
+  useEffect(() => {
+    return () => {
+      unmounted.current = true;
+    };
+  }, []);
+  return unmounted;
+};
+
 const useUpdateDocument = <T extends unknown>(ref: database.Reference) => {
   const [pending, setPending] = useState(false);
   const timeoutRef = useRef<number | null>(null);
-  const mountedRef = useRef(false);
-
-  useEffect(() => {
-    mountedRef.current = true;
-    return () => {
-      mountedRef.current = false;
-    };
-  }, []);
+  const unmounted = useUnmounted();
 
   const updateDocument = useCallback(
     (document: T) => {
@@ -74,7 +77,7 @@ const useUpdateDocument = <T extends unknown>(ref: database.Reference) => {
 
       const delayMs = 500;
       const timeoutId = setTimeout(() => {
-        if (!mountedRef.current) {
+        if (unmounted.current) {
           return;
         }
 
