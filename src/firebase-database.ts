@@ -94,22 +94,16 @@ const useUpdateDocument = <T extends unknown>(ref: database.Reference) => {
 // DB path = users/${userId}/documents/${textId}
 export const useDatabaseDocument = (textId: Document["textId"]) => {
   const ref = useDocRef(`documents/${textId}`);
-  const { document, loaded } = useFetchDocument(ref);
+  const { document, loaded } = useFetchDocument<Document>(ref);
   const { pending, updateDocument } = useUpdateDocument(ref);
 
   const [text, setText] = useState("");
 
   useEffect(() => {
-    // TODO: mounted?
-    let mounted = true;
-    console.log({ mounted });
-    if (mounted && document && "text" in document) {
+    if (document && "text" in document) {
       setText(document.text);
     }
-    return () => {
-      mounted = false;
-    };
-  }, [document]); // TODO: document.text?
+  }, [document]);
 
   const updateText = useCallback(
     (newText: string) => {
